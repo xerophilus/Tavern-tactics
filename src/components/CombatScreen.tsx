@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { ENEMIES } from '../data/enemies';
 import { Enemy, Hero, Card } from '../data/types';
+import { StarDisplay } from './StarDisplay';
 
 interface CombatHero extends Hero {
   currentHealth: number;
@@ -221,9 +222,14 @@ export default function CombatScreen() {
               className={`
                 ${ally.currentHealth > 0 ? 'bg-blue-700' : 'bg-gray-700 opacity-50'}
                 ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'ally' ? 'ring-4 ring-green-400' : ''}
-                p-2 rounded-lg transition-all active:scale-95 disabled:cursor-default
+                p-2 rounded-lg transition-all active:scale-95 disabled:cursor-default relative
               `}
             >
+              {ally.stars > 1 && (
+                <div className="absolute top-0 left-0 right-0 text-center">
+                  <StarDisplay stars={ally.stars} />
+                </div>
+              )}
               <div className="text-2xl mb-1">{ally.emoji}</div>
               <div className="text-white text-[9px]">{ally.name.split(' ')[0]}</div>
               <div className="text-blue-300 text-xs">

@@ -1,7 +1,7 @@
 export type HeroClass = 'Tank' | 'Healer' | 'Mage' | 'Rogue' | 'Warrior';
 export type HeroRace = 'Orc' | 'Human' | 'Undead' | 'Elf' | 'Dwarf';
 
-export interface Hero {
+export interface BaseHero {
   id: string;
   name: string;
   class: HeroClass;
@@ -13,6 +13,11 @@ export interface Hero {
     attack: number;
     defense: number;
   };
+}
+
+export interface Hero extends BaseHero {
+  stars: 1 | 2 | 3;
+  instanceId: string;
 }
 
 export interface Card {

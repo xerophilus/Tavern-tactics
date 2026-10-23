@@ -1,6 +1,7 @@
 import { useGame } from '../contexts/GameContext';
 import { Hero } from '../data/types';
 import { calculateSynergies, getSynergyBonuses } from '../utils/gameLogic';
+import { StarDisplay } from './StarDisplay';
 
 export default function ShopScreen() {
   const { state, buyHero, sellHero, placeHero, removeHero, refreshShop, selectRoom } = useGame();
@@ -47,11 +48,16 @@ export default function ShopScreen() {
               className={`
                 w-16 h-20 rounded-lg flex flex-col items-center justify-center text-2xl
                 ${hero ? 'bg-blue-600 cursor-pointer active:scale-95' : 'bg-slate-600 border-2 border-dashed border-slate-500'}
-                transition-all
+                transition-all relative
               `}
             >
               {hero ? (
                 <>
+                  {hero.stars > 1 && (
+                    <div className="absolute top-0 left-0 right-0 text-center">
+                      <StarDisplay stars={hero.stars} />
+                    </div>
+                  )}
                   <div>{hero.emoji}</div>
                   <div className="text-[8px] text-white mt-1">{hero.name.split(' ')[0]}</div>
                 </>
@@ -110,8 +116,13 @@ export default function ShopScreen() {
                     const emptySlot = state.board.findIndex(h => h === null);
                     if (emptySlot !== -1) placeHero(idx, emptySlot);
                   }}
-                  className="w-full aspect-square bg-blue-600 rounded-lg flex flex-col items-center justify-center text-xl active:scale-95"
+                  className="w-full aspect-square bg-blue-600 rounded-lg flex flex-col items-center justify-center text-xl active:scale-95 relative"
                 >
+                  {hero.stars > 1 && (
+                    <div className="absolute top-0 left-0 right-0 text-center">
+                      <StarDisplay stars={hero.stars} />
+                    </div>
+                  )}
                   <div>{hero.emoji}</div>
                   <div className="text-[7px] text-white">{hero.name.split(' ')[0]}</div>
                 </button>

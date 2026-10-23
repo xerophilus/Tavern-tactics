@@ -1,6 +1,6 @@
-import { Hero } from './types';
+import { BaseHero } from './types';
 
-export const HEROES: Hero[] = [
+export const HEROES: BaseHero[] = [
   {
     id: 'orc_warrior',
     name: 'Throk the Mighty',

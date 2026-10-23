@@ -1,6 +1,7 @@
 import { Hero, Card, Enemy, RoomNode } from '../data/types';
 import { HEROES } from '../data/heroes';
 import { CARDS } from '../data/cards';
+import { createHeroInstance } from './heroLeveling';
 
 export function generateShop(availableHeroes: string[]): Hero[] {
   const pool = HEROES.filter(h => availableHeroes.includes(h.id));
@@ -8,7 +9,7 @@ export function generateShop(availableHeroes: string[]): Hero[] {
   for (let i = 0; i < 4; i++) {
     if (pool.length > 0) {
       const random = pool[Math.floor(Math.random() * pool.length)];
-      shop.push({ ...random });
+      shop.push(createHeroInstance(random));
     }
   }
   return shop;
