@@ -1,4 +1,4 @@
-import { Hero, BaseHero } from '../data/types';
+import type { Hero, BaseHero } from '../data/types';
 
 export function createHeroInstance(baseHero: BaseHero): Hero {
   return {
@@ -39,7 +39,7 @@ export function checkAndCombineHeroes(heroes: Hero[]): { heroes: Hero[], combine
   let result: Hero[] = [];
   
   heroGroups.forEach((group, key) => {
-    const [baseId, starsStr] = key.split('_');
+    const [, starsStr] = key.split('_');
     const stars = parseInt(starsStr) as 1 | 2 | 3;
     
     if (group.length >= 3 && stars < 3) {

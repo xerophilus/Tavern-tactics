@@ -1,5 +1,3 @@
-import { useGame } from '../contexts/GameContext';
-
 interface TitleScreenProps {
   onStart: () => void;
 }

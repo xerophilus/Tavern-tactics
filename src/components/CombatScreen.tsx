@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { ENEMIES } from '../data/enemies';
-import { Enemy, Hero, Card } from '../data/types';
+import type { Enemy, Hero, Card } from '../data/types';
 import { StarDisplay } from './StarDisplay';
 
 interface CombatHero extends Hero {
@@ -11,7 +11,7 @@ interface CombatHero extends Hero {
 
 interface CombatEnemy extends Enemy {
   currentHealth: number;
-  buffs: { attack: number; defense: number };
+  buffs: { attack: number; defense: number; health: number };
 }
 
 export default function CombatScreen() {
@@ -19,7 +19,6 @@ export default function CombatScreen() {
   const [allies, setAllies] = useState<CombatHero[]>([]);
   const [enemies, setEnemies] = useState<CombatEnemy[]>([]);
   const [battleLog, setBattleLog] = useState<string[]>([]);
-  const [turnCount, setTurnCount] = useState(0);
   const [combatPhase, setCombatPhase] = useState<'player_turn' | 'auto_combat' | 'ended'>('player_turn');
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   
@@ -44,7 +43,7 @@ export default function CombatScreen() {
       return {
         ...template,
         currentHealth: template.stats.health,
-        buffs: { attack: 0, defense: 0 }
+        buffs: { attack: 0, defense: 0, health: 0 }
       };
     });
     

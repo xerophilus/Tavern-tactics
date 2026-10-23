@@ -36,9 +36,8 @@ export default function MapScreen() {
     return previousLayerNodes.some(n => n.completed);
   };
   
-  const layers: typeof state.map[][] = [];
-  let currentLayer: typeof state.map = [];
-  let prevConnections = new Set<string>();
+  const layers: typeof state.map[number][][] = [];
+  let currentLayer: typeof state.map[number][] = [];
   
   state.map.forEach((node, idx) => {
     if (idx === 0) {

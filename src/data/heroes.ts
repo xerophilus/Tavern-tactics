@@ -1,4 +1,4 @@
-import { BaseHero } from './types';
+import type { BaseHero } from './types';
 
 export const HEROES: BaseHero[] = [
   {

@@ -1,4 +1,4 @@
-import { Hero, Card, Enemy, RoomNode } from '../data/types';
+import type { Hero, Card, RoomNode } from '../data/types';
 import { HEROES } from '../data/heroes';
 import { CARDS } from '../data/cards';
 import { createHeroInstance } from './heroLeveling';

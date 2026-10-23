@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { GameState, Hero, Card } from '../data/types';
+import { createContext, useContext, useState, type ReactNode } from 'react';
+import type { GameState, Hero } from '../data/types';
 import { CARDS } from '../data/cards';
 import { generateShop, drawCards, generateMap, loadProgress } from '../utils/gameLogic';
 import { createHeroInstance, checkAndCombineHeroes } from '../utils/heroLeveling';
@@ -61,7 +61,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     if (state.gold >= hero.cost && state.bench.length < 8) {
       const newHero = createHeroInstance(hero);
       const allHeroes = [...state.board.filter((h): h is Hero => h !== null), ...state.bench, newHero];
-      const { heroes: combinedHeroes, combined } = checkAndCombineHeroes(allHeroes);
+      const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
       
       const newBoard = state.board.map(slot => {
         if (slot === null) return null;
@@ -143,7 +143,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const playCard = (cardIndex: number, targetIndex?: number) => {
+  const playCard = (cardIndex: number, _targetIndex?: number) => {
     const card = state.hand[cardIndex];
     if (card && state.mana >= card.manaCost) {
       setState(prev => ({

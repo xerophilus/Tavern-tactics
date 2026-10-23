@@ -1,5 +1,4 @@
 import { useGame } from '../contexts/GameContext';
-import { Hero } from '../data/types';
 import { calculateSynergies, getSynergyBonuses } from '../utils/gameLogic';
 import { StarDisplay } from './StarDisplay';
 

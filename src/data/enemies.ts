@@ -1,4 +1,4 @@
-import { Enemy } from './types';
+import type { Enemy } from './types';
 
 export const ENEMIES: Record<string, Enemy[]> = {
   normal: [
