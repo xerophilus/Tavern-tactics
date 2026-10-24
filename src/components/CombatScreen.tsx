@@ -36,7 +36,10 @@ export default function CombatScreen() {
     else if (room.type === 'elite') enemyPool = ENEMIES.elite;
     else enemyPool = ENEMIES.normal;
     
-    const numEnemies = room.type === 'boss' ? 1 : room.type === 'elite' ? 2 : 3;
+    // Easier first fights: 2 enemies in rounds 1-2, 3 enemies later
+    const numEnemies = room.type === 'boss' ? 1 : 
+                       room.type === 'elite' ? 2 : 
+                       state.round <= 2 ? 2 : 3;
     const initialEnemies = Array.from({ length: numEnemies }, () => {
       const template = enemyPool[Math.floor(Math.random() * enemyPool.length)];
       return {

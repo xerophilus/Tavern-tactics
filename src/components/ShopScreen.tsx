@@ -56,8 +56,15 @@ export default function ShopScreen() {
       
       {/* Board Area */}
       <div className="panel m-2 p-3">
-        <div className="text-tavern-gold font-display font-semibold text-sm text-center mb-2">
-          Your Party
+        <div className="flex items-center justify-between mb-2">
+          <div className="text-tavern-gold font-display font-semibold text-sm">
+            Your Party
+          </div>
+          {state.board.some(h => h !== null) && (
+            <div className="text-tavern-parchment-dark text-[9px] font-display">
+              Tap to remove ↓
+            </div>
+          )}
         </div>
         <div className="flex justify-center gap-2">
           {state.board.map((hero, idx) => (
@@ -69,8 +76,13 @@ export default function ShopScreen() {
                   size="medium"
                 />
               ) : (
-                <div className="card-slot w-20 h-28 flex items-center justify-center">
+                <div className="card-slot w-20 h-28 flex items-center justify-center relative">
                   <span className="text-tavern-copper/50 text-3xl">+</span>
+                  {state.bench.length > 0 && (
+                    <div className="absolute -bottom-2 left-0 right-0 flex justify-center text-green-400 text-xs animate-bounce">
+                      ↓
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -102,9 +114,12 @@ export default function ShopScreen() {
               key={idx}
               onClick={() => buyHero(hero)}
               disabled={state.gold < hero.cost}
-              className="panel p-3 space-y-2 active:scale-95 transition-all disabled:opacity-50"
+              className="panel p-3 space-y-2 active:scale-95 transition-all disabled:opacity-50 relative overflow-hidden group"
             >
-              <div className="flex items-center gap-2">
+              {/* Purchase flash animation */}
+              <div className="absolute inset-0 bg-tavern-gold opacity-0 group-active:opacity-30 transition-opacity duration-150" />
+              
+              <div className="flex items-center gap-2 relative z-10">
                 <div className="text-3xl">{hero.emoji}</div>
                 <div className="flex-1 text-left">
                   <div className="text-tavern-parchment text-xs font-display font-bold leading-tight">
@@ -118,7 +133,7 @@ export default function ShopScreen() {
                   {hero.cost}💰
                 </div>
               </div>
-              <div className="flex gap-1 justify-center">
+              <div className="flex gap-1 justify-center relative z-10">
                 <span className="stat-badge text-[10px]">❤️{hero.stats.health}</span>
                 <span className="stat-badge text-[10px]">⚔️{hero.stats.attack}</span>
                 <span className="stat-badge text-[10px]">🛡️{hero.stats.defense}</span>
@@ -129,8 +144,15 @@ export default function ShopScreen() {
         
         {/* Bench */}
         <div className="panel p-3 space-y-2 mt-4">
-          <div className="text-tavern-gold font-display font-semibold text-sm">
-            Bench ({state.bench.length}/8)
+          <div className="flex items-center justify-between">
+            <div className="text-tavern-gold font-display font-semibold text-sm">
+              Bench ({state.bench.length}/8)
+            </div>
+            {state.bench.length > 0 && (
+              <div className="text-tavern-parchment-dark text-[9px] font-display animate-pulse">
+                Tap to add to party ↑
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-4 gap-2">
             {state.bench.map((hero, idx) => (
@@ -144,6 +166,12 @@ export default function ShopScreen() {
                   size="small"
                   showStats={false}
                 />
+                {/* Up arrow indicator */}
+                {state.board.some(h => h === null) && (
+                  <div className="absolute -top-2 left-0 right-0 flex justify-center pointer-events-none">
+                    <div className="text-green-400 text-xs animate-bounce">↑</div>
+                  </div>
+                )}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
