@@ -58,28 +58,63 @@ export function GameProvider({ children }: { children: ReactNode }) {
   };
 
   const buyHero = (hero: Hero) => {
-    if (state.gold >= hero.cost && state.bench.length < 8) {
+    if (state.gold >= hero.cost) {
       const newHero = createHeroInstance(hero);
-      const allHeroes = [...state.board.filter((h): h is Hero => h !== null), ...state.bench, newHero];
-      const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
       
-      const newBoard = state.board.map(slot => {
-        if (slot === null) return null;
-        const found = combinedHeroes.find(h => h.instanceId === slot.instanceId);
-        return found || null;
-      });
+      // Find first empty board slot
+      const emptyBoardIndex = state.board.findIndex(slot => slot === null);
       
-      const newBench = combinedHeroes.filter(h => 
-        !newBoard.some(boardHero => boardHero?.instanceId === h.instanceId)
-      );
-      
-      setState(prev => ({
-        ...prev,
-        gold: prev.gold - hero.cost,
-        bench: newBench,
-        board: newBoard,
-        shop: prev.shop.filter(h => h.instanceId !== hero.instanceId)
-      }));
+      // If there's space on board, place directly
+      if (emptyBoardIndex !== -1) {
+        const newBoard = [...state.board];
+        newBoard[emptyBoardIndex] = newHero;
+        
+        // Check for combining with existing heroes
+        const allHeroes = newBoard.filter((h): h is Hero => h !== null).concat(state.bench);
+        const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
+        
+        // Redistribute after combining
+        const finalBoard: (Hero | null)[] = Array(5).fill(null);
+        const finalBench: Hero[] = [];
+        
+        combinedHeroes.forEach((h, idx) => {
+          if (idx < 5) {
+            finalBoard[idx] = h;
+          } else {
+            finalBench.push(h);
+          }
+        });
+        
+        setState(prev => ({
+          ...prev,
+          gold: prev.gold - hero.cost,
+          board: finalBoard,
+          bench: finalBench,
+          shop: prev.shop.filter(h => h.instanceId !== hero.instanceId)
+        }));
+      } else if (state.bench.length < 8) {
+        // Board full, add to bench
+        const allHeroes = [...state.board.filter((h): h is Hero => h !== null), ...state.bench, newHero];
+        const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
+        
+        const newBoard = state.board.map(slot => {
+          if (slot === null) return null;
+          const found = combinedHeroes.find(h => h.instanceId === slot.instanceId);
+          return found || null;
+        });
+        
+        const newBench = combinedHeroes.filter(h => 
+          !newBoard.some(boardHero => boardHero?.instanceId === h.instanceId)
+        );
+        
+        setState(prev => ({
+          ...prev,
+          gold: prev.gold - hero.cost,
+          bench: newBench,
+          board: newBoard,
+          shop: prev.shop.filter(h => h.instanceId !== hero.instanceId)
+        }));
+      }
     }
   };
 

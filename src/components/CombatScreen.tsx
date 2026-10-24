@@ -198,7 +198,7 @@ export default function CombatScreen() {
               >
                 <div className="text-5xl">{enemy.emoji}</div>
                 <div className="text-center w-full">
-                  <div className="text-white text-xs font-display font-bold mb-1">
+                  <div className="text-white text-xs font-display font-bold mb-1 drop-shadow-lg">
                     {enemy.name}
                   </div>
                   {/* HP Bar */}
@@ -208,7 +208,7 @@ export default function CombatScreen() {
                       style={{ width: `${Math.max(0, hpPercent)}%` }}
                     />
                   </div>
-                  <div className="text-[10px] text-red-200 mt-1">
+                  <div className="text-[11px] text-white font-bold mt-1 drop-shadow-md">
                     {Math.max(0, enemy.currentHealth)}/{enemy.stats.health} HP
                   </div>
                 </div>

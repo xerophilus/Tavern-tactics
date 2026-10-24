@@ -9,8 +9,11 @@ export default function ShopScreen() {
   const bonuses = getSynergyBonuses(synergies);
   
   const isInitialShop = !state.currentRoom;
+  const hasHeroes = state.board.some(h => h !== null);
   
   const handleProceed = () => {
+    if (!hasHeroes) return; // Safety check
+    
     if (isInitialShop) {
       // Go to map for first time
       selectRoom('map');
@@ -78,7 +81,12 @@ export default function ShopScreen() {
       {/* Shop */}
       <div className="flex-1 panel m-2 p-3 overflow-y-auto space-y-3">
         <div className="flex justify-between items-center">
-          <h3 className="text-tavern-gold font-display font-bold text-lg">Tavern Shop</h3>
+          <div>
+            <h3 className="text-tavern-gold font-display font-bold text-lg">Tavern Shop</h3>
+            <p className="text-tavern-parchment-dark text-[10px] font-display">
+              Tap to recruit heroes
+            </p>
+          </div>
           <button
             onClick={refreshShop}
             disabled={state.gold < 2}
@@ -152,10 +160,16 @@ export default function ShopScreen() {
       </div>
       
       {/* Ready Button */}
-      <div className="p-3">
+      <div className="p-3 space-y-2">
+        {!hasHeroes && (
+          <div className="text-center text-tavern-gold text-sm font-display animate-pulse">
+            👆 Tap heroes above to recruit them!
+          </div>
+        )}
         <button
           onClick={handleProceed}
-          className="btn-primary w-full"
+          disabled={!hasHeroes}
+          className="btn-primary w-full disabled:opacity-30 disabled:cursor-not-allowed"
         >
           {isInitialShop ? '🗺️ Enter Dungeon' : '⚔️ Continue'}
         </button>
