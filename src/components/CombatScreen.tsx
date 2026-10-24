@@ -178,7 +178,7 @@ export default function CombatScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset" style={{ width: '100%', maxWidth: '100%' }}>
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0 }}>
       {/* Enemy Area - Large Cards */}
       <div className="p-3 min-h-[30%] bg-red-950/40" style={{ width: '100%' }}>
         <div className="font-display font-semibold text-sm text-center mb-2" style={{ color: '#FFFFFF' }}>
