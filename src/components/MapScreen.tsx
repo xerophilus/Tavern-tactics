@@ -5,12 +5,12 @@ export default function MapScreen() {
   
   const getNodeColor = (type: string) => {
     switch (type) {
-      case 'combat': return 'bg-red-600';
-      case 'shop': return 'bg-yellow-600';
-      case 'rest': return 'bg-green-600';
-      case 'elite': return 'bg-purple-600';
-      case 'boss': return 'bg-red-900';
-      default: return 'bg-gray-600';
+      case 'combat': return 'bg-gradient-to-br from-red-700 to-red-900 border-red-600';
+      case 'shop': return 'bg-gradient-to-br from-tavern-gold to-tavern-copper border-tavern-gold-light';
+      case 'rest': return 'bg-gradient-to-br from-green-700 to-green-900 border-green-600';
+      case 'elite': return 'bg-gradient-to-br from-purple-700 to-purple-900 border-purple-600';
+      case 'boss': return 'bg-gradient-to-br from-red-950 to-black border-red-700';
+      default: return 'bg-tavern-wood border-tavern-copper';
     }
   };
   
@@ -25,7 +25,7 @@ export default function MapScreen() {
     }
   };
   
-  const canSelectNode = (node: typeof state.map[0]) => {
+  const canSelectNode = (node: typeof state.map[number]) => {
     if (node.completed) return false;
     if (state.round === 1) return node.id === 'node_0' || node.id === 'node_1' || node.id === 'node_2';
     
@@ -52,22 +52,30 @@ export default function MapScreen() {
   if (currentLayer.length > 0) layers.push(currentLayer);
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-slate-800 to-slate-900 p-4 overflow-y-auto">
-      <div className="mb-4 bg-slate-700 p-3 rounded-lg">
-        <div className="flex justify-between text-white text-sm">
-          <div>❤️ {state.health}/{state.maxHealth}</div>
-          <div>💰 {state.gold}</div>
-          <div>🎯 Round {state.round}</div>
+    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood safe-area-inset">
+      {/* Top Stats */}
+      <div className="panel m-2 p-3">
+        <div className="flex justify-between text-tavern-parchment items-center">
+          <div className="stat-badge text-sm">❤️ {state.health}/{state.maxHealth}</div>
+          <div className="text-2xl font-display font-black text-tavern-gold-light">
+            💰 {state.gold}
+          </div>
+          <div className="stat-badge text-sm">🎯 Round {state.round}</div>
         </div>
       </div>
       
-      <div className="text-center text-white mb-4">
-        <h2 className="text-xl font-bold">Choose Your Path</h2>
+      {/* Title */}
+      <div className="text-center py-4">
+        <h2 className="text-2xl font-display font-bold text-tavern-gold-light">
+          Choose Your Path
+        </h2>
+        <div className="h-0.5 w-24 mx-auto mt-2 bg-gradient-to-r from-transparent via-tavern-gold to-transparent" />
       </div>
       
-      <div className="flex-1 flex flex-col justify-around space-y-4 pb-4">
+      {/* Map */}
+      <div className="flex-1 flex flex-col justify-around px-4 py-2 overflow-y-auto">
         {layers.map((layer, layerIdx) => (
-          <div key={layerIdx} className="flex justify-center gap-4">
+          <div key={layerIdx} className="flex justify-center gap-4 py-2">
             {layer.map(node => {
               const selectable = canSelectNode(node);
               return (
@@ -76,20 +84,33 @@ export default function MapScreen() {
                   onClick={() => selectable && selectRoom(node.id)}
                   disabled={!selectable || node.completed}
                   className={`
+                    relative w-20 h-20 rounded-2xl flex items-center justify-center text-3xl
+                    border-4 shadow-card
                     ${getNodeColor(node.type)}
-                    ${node.completed ? 'opacity-30' : selectable ? 'opacity-100' : 'opacity-50'}
-                    ${selectable && !node.completed ? 'scale-110 ring-4 ring-yellow-400' : ''}
-                    w-16 h-16 rounded-full flex items-center justify-center text-2xl
+                    ${node.completed ? 'opacity-30 grayscale' : selectable ? 'opacity-100' : 'opacity-40'}
+                    ${selectable && !node.completed ? 'scale-110 ring-4 ring-tavern-gold-light animate-bounce-subtle' : ''}
                     transition-all duration-200 active:scale-95
                     disabled:cursor-not-allowed
                   `}
                 >
-                  {getNodeEmoji(node.type)}
+                  <span className="drop-shadow-lg relative z-10">{getNodeEmoji(node.type)}</span>
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 to-transparent" />
+                  
+                  {node.completed && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-xl">
+                      <span className="text-4xl">✓</span>
+                    </div>
+                  )}
                 </button>
               );
             })}
           </div>
         ))}
+      </div>
+      
+      {/* Connection lines hint */}
+      <div className="text-center py-2 px-4 text-tavern-parchment-dark text-xs font-display opacity-60">
+        Tap a highlighted node to continue
       </div>
     </div>
   );

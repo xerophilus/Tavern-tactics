@@ -34,8 +34,8 @@ function GameContent() {
 function App() {
   return (
     <GameProvider>
-      <div className="fixed inset-0 bg-slate-950 overflow-hidden">
-        <div className="h-full max-w-md mx-auto relative">
+      <div className="fixed inset-0 bg-tavern-darkest overflow-hidden">
+        <div className="h-full max-w-md mx-auto relative bg-gradient-to-b from-tavern-darkest to-tavern-dark">
           <GameContent />
         </div>
       </div>

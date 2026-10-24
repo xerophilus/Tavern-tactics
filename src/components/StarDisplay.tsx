@@ -8,7 +8,7 @@ export function StarDisplay({ stars, size = 'sm' }: StarDisplayProps) {
   const sizeClass = size === 'sm' ? 'text-[10px]' : 'text-xs';
   
   return (
-    <div className={`${sizeClass} leading-none`}>
+    <div className={`${sizeClass} leading-none text-tavern-gold-light drop-shadow-lg`}>
       {starChar.repeat(stars)}
     </div>
   );

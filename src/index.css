@@ -2,23 +2,209 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  touch-action: manipulation;
-  user-select: none;
-  -webkit-user-select: none;
-  overscroll-behavior: none;
+@layer base {
+  :root {
+    --tavern-darkest: #0a0604;
+    --tavern-dark: #1a0f0a;
+    --tavern-wood: #2d1b0e;
+    --tavern-wood-light: #4a2f1a;
+    --tavern-parchment: #e8d7bf;
+    --tavern-parchment-dark: #d4c1a3;
+    --tavern-gold: #d4af37;
+    --tavern-gold-light: #f4d03f;
+    --tavern-copper: #b87333;
+    --tavern-bronze: #cd7f32;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Merriweather', serif;
+    background-color: var(--tavern-darkest);
+    color: var(--tavern-parchment);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    overscroll-behavior: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+  }
 }
 
-* {
-  box-sizing: border-box;
+@layer utilities {
+  .font-display {
+    font-family: 'Cinzel', serif;
+  }
+  
+  .font-body {
+    font-family: 'Merriweather', serif;
+  }
+  
+  .bg-tavern-darkest { background-color: var(--tavern-darkest); }
+  .bg-tavern-dark { background-color: var(--tavern-dark); }
+  .bg-tavern-wood { background-color: var(--tavern-wood); }
+  .bg-tavern-wood-light { background-color: var(--tavern-wood-light); }
+  
+  .text-tavern-parchment { color: var(--tavern-parchment); }
+  .text-tavern-parchment-dark { color: var(--tavern-parchment-dark); }
+  .text-tavern-gold { color: var(--tavern-gold); }
+  .text-tavern-gold-light { color: var(--tavern-gold-light); }
+  .text-tavern-copper { color: var(--tavern-copper); }
+  
+  .border-tavern-copper { border-color: var(--tavern-copper); }
+  .border-tavern-gold { border-color: var(--tavern-gold); }
+  .border-tavern-gold-light { border-color: var(--tavern-gold-light); }
+  .border-tavern-bronze { border-color: var(--tavern-bronze); }
+  
+  .from-tavern-darkest { --tw-gradient-from: var(--tavern-darkest) var(--tw-gradient-from-position); --tw-gradient-to: rgb(10 6 4 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-dark { --tw-gradient-from: var(--tavern-dark) var(--tw-gradient-from-position); --tw-gradient-to: rgb(26 15 10 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-wood { --tw-gradient-from: var(--tavern-wood) var(--tw-gradient-from-position); --tw-gradient-to: rgb(45 27 14 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-wood-light { --tw-gradient-from: var(--tavern-wood-light) var(--tw-gradient-from-position); --tw-gradient-to: rgb(74 47 26 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-gold { --tw-gradient-from: var(--tavern-gold) var(--tw-gradient-from-position); --tw-gradient-to: rgb(212 175 55 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-gold-light { --tw-gradient-from: var(--tavern-gold-light) var(--tw-gradient-from-position); --tw-gradient-to: rgb(244 208 63 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  .from-tavern-copper { --tw-gradient-from: var(--tavern-copper) var(--tw-gradient-from-position); --tw-gradient-to: rgb(184 115 51 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+  
+  .to-tavern-darkest { --tw-gradient-to: var(--tavern-darkest) var(--tw-gradient-to-position); }
+  .to-tavern-dark { --tw-gradient-to: var(--tavern-dark) var(--tw-gradient-to-position); }
+  .to-tavern-wood { --tw-gradient-to: var(--tavern-wood) var(--tw-gradient-to-position); }
+  .to-tavern-copper { --tw-gradient-to: var(--tavern-copper) var(--tw-gradient-to-position); }
+  .to-tavern-gold { --tw-gradient-to: var(--tavern-gold) var(--tw-gradient-to-position); }
+  
+  .via-tavern-dark { --tw-gradient-to: rgb(26 15 10 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tavern-dark) var(--tw-gradient-via-position), var(--tw-gradient-to); }
+  .via-tavern-wood { --tw-gradient-to: rgb(45 27 14 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tavern-wood) var(--tw-gradient-via-position), var(--tw-gradient-to); }
+  .via-tavern-gold { --tw-gradient-to: rgb(212 175 55 / 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tavern-gold) var(--tw-gradient-via-position), var(--tw-gradient-to); }
+  
+  .ring-tavern-gold-light { --tw-ring-color: var(--tavern-gold-light); }
+  
+  .shadow-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+  
+  .shadow-card-hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
-#root {
-  min-height: 100vh;
-  min-height: 100dvh;
+@layer components {
+  .hero-card {
+    position: relative;
+    background: linear-gradient(to bottom, var(--tavern-wood-light), var(--tavern-wood));
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    border: 2px solid rgba(184, 115, 51, 0.5);
+    transition: all 0.2s;
+  }
+  
+  .hero-card:active {
+    transform: scale(0.95);
+  }
+  
+  .hero-card-frame {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: 
+      linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 20%),
+      linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 30%);
+  }
+  
+  .stat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--tavern-parchment);
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid rgba(184, 115, 51, 0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  }
+  
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    background: linear-gradient(to bottom, var(--tavern-gold-light), var(--tavern-gold));
+    color: var(--tavern-darkest);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(244, 208, 63, 0.5);
+    transition: all 0.2s;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+  }
+  
+  .btn-primary:active {
+    transform: scale(0.95);
+  }
+  
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .btn-secondary {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    background: linear-gradient(to bottom, var(--tavern-wood-light), var(--tavern-wood));
+    color: var(--tavern-parchment);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(184, 115, 51, 0.5);
+    transition: all 0.2s;
+  }
+  
+  .btn-secondary:active {
+    transform: scale(0.95);
+  }
+  
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .panel {
+    background: linear-gradient(to bottom, var(--tavern-wood), var(--tavern-dark));
+    border: 2px solid rgba(184, 115, 51, 0.3);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .card-slot {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 0.5rem;
+    border: 2px dashed rgba(184, 115, 51, 0.3);
+    background-color: rgba(45, 27, 14, 0.3);
+    transition: all 0.2s;
+  }
+  
+  .card-slot:hover {
+    border-color: rgba(212, 175, 55, 0.5);
+    background-color: rgba(45, 27, 14, 0.5);
+  }
+  
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

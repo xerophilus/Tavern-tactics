@@ -4,21 +4,42 @@ export default function VictoryScreen() {
   const { startNewRun } = useGame();
   
   return (
-    <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-yellow-600 to-yellow-800 p-6 text-center">
-      <div className="text-8xl mb-6">🏆</div>
-      <h1 className="text-4xl font-bold text-white mb-4">Victory!</h1>
-      <p className="text-yellow-100 text-lg mb-8">
-        You've conquered the dungeon and defeated Shadowfang!
-      </p>
-      <div className="bg-yellow-900 p-4 rounded-lg mb-8 text-yellow-100">
-        <p className="text-sm">New heroes and cards have been unlocked!</p>
+    <div className="flex flex-col items-center justify-center h-full bg-gradient-to-b from-tavern-gold/20 via-tavern-dark to-tavern-darkest p-6 text-center safe-area-inset">
+      <div className="space-y-6 animate-slide-up">
+        <div className="text-8xl mb-6 animate-bounce-subtle drop-shadow-2xl">🏆</div>
+        
+        <div className="space-y-2">
+          <h1 className="text-5xl font-display font-black text-tavern-gold-light tracking-tight">
+            Victory!
+          </h1>
+          <div className="h-1 w-32 mx-auto bg-gradient-to-r from-transparent via-tavern-gold to-transparent" />
+        </div>
+        
+        <p className="text-tavern-parchment text-lg font-display max-w-sm">
+          You've conquered the dungeon and defeated Shadowfang the Destroyer!
+        </p>
+        
+        <div className="panel p-5 max-w-sm space-y-2">
+          <div className="text-tavern-gold-light font-display font-bold border-b border-tavern-copper/30 pb-2">
+            Rewards Unlocked
+          </div>
+          <p className="text-tavern-parchment text-sm">
+            New heroes and powerful cards await you in the tavern!
+          </p>
+          <div className="flex justify-center gap-2 pt-2">
+            <span className="text-3xl">🗿</span>
+            <span className="text-3xl">🔮</span>
+            <span className="text-3xl">🔥</span>
+          </div>
+        </div>
+        
+        <button
+          onClick={startNewRun}
+          className="btn-primary px-10 py-4 text-xl"
+        >
+          ⚔️ New Run
+        </button>
       </div>
-      <button
-        onClick={startNewRun}
-        className="bg-green-600 text-white px-8 py-4 rounded-lg text-xl font-bold active:scale-95 transition-transform"
-      >
-        New Run ⚔️
-      </button>
     </div>
   );
 }

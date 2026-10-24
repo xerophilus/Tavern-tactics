@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useGame } from '../contexts/GameContext';
 import { ENEMIES } from '../data/enemies';
 import type { Enemy, Hero, Card } from '../data/types';
-import { StarDisplay } from './StarDisplay';
 
 interface CombatHero extends Hero {
   currentHealth: number;
@@ -176,10 +175,12 @@ export default function CombatScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-slate-900 to-red-950">
+    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset">
       {/* Enemy Area */}
-      <div className="bg-red-900 p-3 min-h-[35%]">
-        <div className="text-white text-xs mb-2 text-center">Enemies</div>
+      <div className="panel m-2 p-3 min-h-[30%]">
+        <div className="text-red-400 font-display font-semibold text-sm text-center mb-2">
+          Enemies
+        </div>
         <div className="flex justify-center gap-2 flex-wrap">
           {enemies.map((enemy, idx) => (
             <button
@@ -187,14 +188,15 @@ export default function CombatScreen() {
               onClick={() => handleTargetSelect(idx, true)}
               disabled={enemy.currentHealth <= 0 || selectedCard === null}
               className={`
-                ${enemy.currentHealth > 0 ? 'bg-red-700' : 'bg-gray-700 opacity-50'}
-                ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'enemy' ? 'ring-4 ring-yellow-400' : ''}
-                p-2 rounded-lg transition-all active:scale-95 disabled:cursor-default
+                panel p-2 min-w-[80px]
+                ${enemy.currentHealth > 0 ? 'bg-red-900/40' : 'opacity-30'}
+                ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'enemy' ? 'ring-4 ring-tavern-gold-light' : ''}
+                transition-all active:scale-95 disabled:cursor-default
               `}
             >
               <div className="text-3xl mb-1">{enemy.emoji}</div>
-              <div className="text-white text-[9px]">{enemy.name}</div>
-              <div className="text-red-300 text-xs">
+              <div className="text-tavern-parchment text-[10px] font-display mb-1">{enemy.name}</div>
+              <div className="stat-badge text-[10px]">
                 ❤️{Math.max(0, enemy.currentHealth)}/{enemy.stats.health}
               </div>
             </button>
@@ -203,15 +205,19 @@ export default function CombatScreen() {
       </div>
       
       {/* Battle Log */}
-      <div className="bg-slate-800 p-2 overflow-y-auto max-h-20">
+      <div className="panel m-2 p-2 max-h-16 overflow-y-auto">
         {battleLog.slice(-3).map((log, idx) => (
-          <div key={idx} className="text-amber-200 text-[10px]">{log}</div>
+          <div key={idx} className="text-tavern-parchment-dark text-[10px] font-display">
+            {log}
+          </div>
         ))}
       </div>
       
       {/* Ally Area */}
-      <div className="bg-blue-900 p-3 flex-1">
-        <div className="text-white text-xs mb-2 text-center">Your Party</div>
+      <div className="flex-1 panel m-2 p-3">
+        <div className="text-blue-400 font-display font-semibold text-sm text-center mb-2">
+          Your Party
+        </div>
         <div className="flex justify-center gap-2">
           {allies.map((ally, idx) => (
             <button
@@ -219,19 +225,24 @@ export default function CombatScreen() {
               onClick={() => handleTargetSelect(idx, false)}
               disabled={ally.currentHealth <= 0 || selectedCard === null}
               className={`
-                ${ally.currentHealth > 0 ? 'bg-blue-700' : 'bg-gray-700 opacity-50'}
+                panel p-2 relative
+                ${ally.currentHealth > 0 ? 'bg-blue-900/40' : 'opacity-30'}
                 ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'ally' ? 'ring-4 ring-green-400' : ''}
-                p-2 rounded-lg transition-all active:scale-95 disabled:cursor-default relative
+                transition-all active:scale-95 disabled:cursor-default
               `}
             >
               {ally.stars > 1 && (
-                <div className="absolute top-0 left-0 right-0 text-center">
-                  <StarDisplay stars={ally.stars} />
+                <div className="absolute -top-1 left-0 right-0 flex justify-center z-20">
+                  <div className="bg-black/80 px-1.5 py-0.5 rounded-full border border-tavern-gold/50 text-[8px]">
+                    {'⭐'.repeat(ally.stars)}
+                  </div>
                 </div>
               )}
               <div className="text-2xl mb-1">{ally.emoji}</div>
-              <div className="text-white text-[9px]">{ally.name.split(' ')[0]}</div>
-              <div className="text-blue-300 text-xs">
+              <div className="text-tavern-parchment text-[10px] font-display mb-1">
+                {ally.name.split(' ')[0]}
+              </div>
+              <div className="stat-badge text-[10px]">
                 ❤️{Math.max(0, ally.currentHealth)}/{ally.stats.health}
               </div>
             </button>
@@ -240,40 +251,43 @@ export default function CombatScreen() {
       </div>
       
       {/* Hand & Mana */}
-      <div className="bg-slate-800 p-3">
-        <div className="flex justify-between mb-2">
-          <div className="text-blue-400 font-bold">💧 {state.mana}/{state.maxMana}</div>
+      <div className="panel m-2 p-3 space-y-2">
+        <div className="flex justify-between items-center">
+          <div className="stat-badge">💧 {state.mana}/{state.maxMana}</div>
           {combatPhase === 'player_turn' && (
             <button
               onClick={runAutoCombat}
-              className="bg-green-600 text-white px-3 py-1 rounded text-sm active:scale-95"
+              className="btn-secondary text-sm"
             >
               End Turn ⚔️
             </button>
           )}
         </div>
         
-        <div className="flex gap-2 overflow-x-auto">
+        <div className="flex gap-2 overflow-x-auto pb-2">
           {state.hand.map((card, idx) => (
             <button
               key={idx}
               onClick={() => handleCardPlay(idx)}
               disabled={state.mana < card.manaCost || combatPhase !== 'player_turn' || selectedCard === idx}
               className={`
-                ${selectedCard === idx ? 'bg-yellow-600 ring-4 ring-yellow-400' : 'bg-slate-700'}
+                panel p-2 flex-shrink-0 w-20 space-y-1
+                ${selectedCard === idx ? 'ring-4 ring-tavern-gold-light bg-tavern-gold/20' : ''}
                 ${state.mana < card.manaCost ? 'opacity-50' : ''}
-                flex-shrink-0 p-2 rounded-lg w-20 active:scale-95 disabled:cursor-not-allowed
+                transition-all active:scale-95 disabled:cursor-not-allowed
               `}
             >
               <div className="text-2xl">{card.emoji}</div>
-              <div className="text-white text-[9px] mt-1">{card.name}</div>
-              <div className="text-blue-400 text-xs font-bold">{card.manaCost}💧</div>
+              <div className="text-tavern-parchment text-[10px] font-display leading-tight">
+                {card.name}
+              </div>
+              <div className="stat-badge text-[10px]">{card.manaCost}💧</div>
             </button>
           ))}
         </div>
         
         {selectedCard !== null && (
-          <div className="mt-2 text-amber-200 text-[10px] text-center">
+          <div className="text-tavern-parchment-dark text-[10px] font-display text-center animate-pulse">
             {state.hand[selectedCard]?.description}
           </div>
         )}
