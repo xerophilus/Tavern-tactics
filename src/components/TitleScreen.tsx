@@ -4,7 +4,7 @@ interface TitleScreenProps {
 
 export default function TitleScreen({ onStart }: TitleScreenProps) {
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood p-safe">
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood p-safe">
       {/* Decorative top bar */}
       <div className="h-1 bg-gradient-to-r from-transparent via-tavern-gold to-transparent" />
       

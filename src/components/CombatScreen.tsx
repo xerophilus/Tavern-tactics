@@ -181,7 +181,7 @@ export default function CombatScreen() {
     <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset">
       {/* Enemy Area - Large Cards */}
       <div className="p-3 min-h-[30%] bg-red-950/40">
-        <div className="text-red-300 font-display font-semibold text-sm text-center mb-2">
+        <div className="text-white font-display font-semibold text-sm text-center mb-2">
           ENEMIES
         </div>
         <div className="flex justify-center gap-2">
@@ -200,18 +200,18 @@ export default function CombatScreen() {
                 `}
               >
                 <div className="text-5xl">{enemy.emoji}</div>
-                <div className="text-center w-full">
-                  <div className="text-white text-xs font-display font-bold mb-1 drop-shadow-lg">
+                <div className="text-center w-full space-y-1">
+                  <div className="text-white text-xs font-display font-black tracking-wide" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,1)' }}>
                     {enemy.name}
                   </div>
                   {/* HP Bar */}
-                  <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-red-600/50">
+                  <div className="w-full bg-black/80 h-3 rounded-full overflow-hidden border-2 border-red-500/80">
                     <div 
                       className="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all duration-300"
                       style={{ width: `${Math.max(0, hpPercent)}%` }}
                     />
                   </div>
-                  <div className="text-[11px] text-white font-bold mt-1 drop-shadow-md">
+                  <div className="text-xs text-white font-black tracking-wide" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,1)' }}>
                     {Math.max(0, enemy.currentHealth)}/{enemy.stats.health} HP
                   </div>
                 </div>

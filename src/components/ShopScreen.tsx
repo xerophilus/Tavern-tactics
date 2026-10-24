@@ -32,7 +32,7 @@ export default function ShopScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-dark via-tavern-wood to-tavern-dark safe-area-inset">
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-dark via-tavern-wood to-tavern-dark safe-area-inset">
       {/* Top Stats Bar */}
       <div className="panel m-2 p-3 space-y-2">
         <div className="flex justify-between items-center text-tavern-parchment">
