@@ -178,9 +178,9 @@ export default function CombatScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset">
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset" style={{ width: '100%', maxWidth: '100%' }}>
       {/* Enemy Area - Large Cards */}
-      <div className="p-3 min-h-[30%] bg-red-950/40">
+      <div className="p-3 min-h-[30%] bg-red-950/40" style={{ width: '100%' }}>
         <div className="font-display font-semibold text-sm text-center mb-2" style={{ color: '#FFFFFF' }}>
           ENEMIES
         </div>
@@ -222,7 +222,7 @@ export default function CombatScreen() {
       </div>
       
       {/* Battle Log */}
-      <div className="panel m-2 p-2 max-h-16 overflow-y-auto">
+      <div className="panel m-2 p-2 max-h-16 overflow-y-auto" style={{ width: 'calc(100% - 1rem)' }}>
         <div className="text-center space-y-0.5">
           {battleLog.slice(-2).map((log, idx) => (
             <div key={idx} className="text-tavern-parchment-dark text-[10px] font-display">
@@ -233,7 +233,7 @@ export default function CombatScreen() {
       </div>
       
       {/* Ally Area - Large Cards */}
-      <div className="flex-1 p-3 bg-blue-950/40">
+      <div className="flex-1 p-3 bg-blue-950/40" style={{ width: '100%' }}>
         <div className="text-blue-300 font-display font-semibold text-sm text-center mb-2">
           YOUR PARTY
         </div>
@@ -282,7 +282,7 @@ export default function CombatScreen() {
       </div>
       
       {/* Hand - Hearthstone style */}
-      <div className="bg-gradient-to-t from-black/80 to-transparent p-3 pt-6">
+      <div className="bg-gradient-to-t from-black/80 to-transparent p-3 pt-6" style={{ width: '100%' }}>
         <div className="flex justify-between items-center mb-2">
           <div className="stat-badge text-base">💧 {state.mana}/{state.maxMana}</div>
           {combatPhase === 'player_turn' && (

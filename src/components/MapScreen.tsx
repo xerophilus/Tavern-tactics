@@ -73,7 +73,7 @@ export default function MapScreen() {
   }
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood safe-area-inset w-full">
+    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood safe-area-inset w-full" style={{ width: '100%', maxWidth: '100%' }}>
       {/* Top Stats */}
       <div className="panel m-2 p-3">
         <div className="flex justify-between text-tavern-parchment items-center">
