@@ -31,14 +31,14 @@ function createInitialState(): GameState {
   const map = generateMap();
   
   return {
-    phase: 'map',
-    gold: 10,
+    phase: 'shop',  // Start with shop to recruit heroes
+    gold: 15,  // Extra gold for initial recruitment
     health: 100,
     maxHealth: 100,
     round: 1,
     board: Array(5).fill(null),
     bench: [],
-    shop: [],
+    shop: generateShop(progress.heroes),  // Generate initial shop
     deck: [],
     hand: [],
     mana: 3,
@@ -155,6 +155,12 @@ export function GameProvider({ children }: { children: ReactNode }) {
   };
 
   const selectRoom = (roomId: string) => {
+    // Special case: going to map from initial shop
+    if (roomId === 'map') {
+      setState(prev => ({ ...prev, phase: 'map' }));
+      return;
+    }
+    
     const room = state.map.find(r => r.id === roomId);
     if (!room) return;
     

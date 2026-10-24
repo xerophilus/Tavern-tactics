@@ -74,8 +74,8 @@ export default function CombatScreen() {
       } else if (card.effect.target === 'all_enemies') {
         enemies.forEach(e => {
           e.currentHealth -= card.effect.value;
-          logs.push(`${card.emoji} ${card.name} dealt ${card.effect.value} damage to ${e.name}`);
         });
+        logs.push(`${card.emoji} ${card.name} dealt ${card.effect.value} damage to all enemies`);
       } else if (card.effect.target === 'enemy' && targetIdx !== undefined) {
         enemies[targetIdx].currentHealth -= card.effect.value;
         logs.push(`${card.emoji} ${card.name} dealt ${card.effect.value} damage to ${enemies[targetIdx].name}`);
@@ -143,7 +143,7 @@ export default function CombatScreen() {
         const target = currentEnemies[0];
         const damage = Math.max(1, ally.stats.attack + ally.buffs.attack - target.stats.defense - target.buffs.defense);
         target.currentHealth -= damage;
-        logs.push(`${ally.emoji} ${ally.name} attacks ${target.name} for ${damage} damage`);
+        logs.push(`${ally.name} attacks for ${damage}`);
       });
       
       currentEnemies = currentEnemies.filter(e => e.currentHealth > 0);
@@ -153,7 +153,7 @@ export default function CombatScreen() {
         const target = currentAllies[0];
         const damage = Math.max(1, enemy.stats.attack + enemy.buffs.attack - target.stats.defense - target.buffs.defense);
         target.currentHealth -= damage;
-        logs.push(`${enemy.emoji} ${enemy.name} attacks ${target.name} for ${damage} damage`);
+        logs.push(`${enemy.name} attacks for ${damage}`);
       });
       
       currentAllies = currentAllies.filter(a => a.currentHealth > 0);
@@ -175,119 +175,150 @@ export default function CombatScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset">
-      {/* Enemy Area */}
-      <div className="panel m-2 p-3 min-h-[30%]">
-        <div className="text-red-400 font-display font-semibold text-sm text-center mb-2">
-          Enemies
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset">
+      {/* Enemy Area - Large Cards */}
+      <div className="p-3 min-h-[30%] bg-red-950/40">
+        <div className="text-red-300 font-display font-semibold text-sm text-center mb-2">
+          ENEMIES
         </div>
-        <div className="flex justify-center gap-2 flex-wrap">
-          {enemies.map((enemy, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleTargetSelect(idx, true)}
-              disabled={enemy.currentHealth <= 0 || selectedCard === null}
-              className={`
-                panel p-2 min-w-[80px]
-                ${enemy.currentHealth > 0 ? 'bg-red-900/40' : 'opacity-30'}
-                ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'enemy' ? 'ring-4 ring-tavern-gold-light' : ''}
-                transition-all active:scale-95 disabled:cursor-default
-              `}
-            >
-              <div className="text-3xl mb-1">{enemy.emoji}</div>
-              <div className="text-tavern-parchment text-[10px] font-display mb-1">{enemy.name}</div>
-              <div className="stat-badge text-[10px]">
-                ❤️{Math.max(0, enemy.currentHealth)}/{enemy.stats.health}
-              </div>
-            </button>
-          ))}
+        <div className="flex justify-center gap-2">
+          {enemies.map((enemy, idx) => {
+            const hpPercent = (enemy.currentHealth / enemy.stats.health) * 100;
+            return (
+              <button
+                key={idx}
+                onClick={() => handleTargetSelect(idx, true)}
+                disabled={enemy.currentHealth <= 0 || selectedCard === null}
+                className={`
+                  panel p-3 w-28 h-36 flex flex-col items-center justify-between
+                  ${enemy.currentHealth > 0 ? 'bg-red-900/60' : 'opacity-30 grayscale'}
+                  ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'enemy' ? 'ring-4 ring-yellow-400 scale-105' : ''}
+                  transition-all active:scale-95 disabled:cursor-default
+                `}
+              >
+                <div className="text-5xl">{enemy.emoji}</div>
+                <div className="text-center w-full">
+                  <div className="text-white text-xs font-display font-bold mb-1">
+                    {enemy.name}
+                  </div>
+                  {/* HP Bar */}
+                  <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-red-600/50">
+                    <div 
+                      className="h-full bg-gradient-to-r from-red-600 to-red-400 transition-all duration-300"
+                      style={{ width: `${Math.max(0, hpPercent)}%` }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-red-200 mt-1">
+                    {Math.max(0, enemy.currentHealth)}/{enemy.stats.health} HP
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
       
       {/* Battle Log */}
       <div className="panel m-2 p-2 max-h-16 overflow-y-auto">
-        {battleLog.slice(-3).map((log, idx) => (
-          <div key={idx} className="text-tavern-parchment-dark text-[10px] font-display">
-            {log}
-          </div>
-        ))}
-      </div>
-      
-      {/* Ally Area */}
-      <div className="flex-1 panel m-2 p-3">
-        <div className="text-blue-400 font-display font-semibold text-sm text-center mb-2">
-          Your Party
-        </div>
-        <div className="flex justify-center gap-2">
-          {allies.map((ally, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleTargetSelect(idx, false)}
-              disabled={ally.currentHealth <= 0 || selectedCard === null}
-              className={`
-                panel p-2 relative
-                ${ally.currentHealth > 0 ? 'bg-blue-900/40' : 'opacity-30'}
-                ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'ally' ? 'ring-4 ring-green-400' : ''}
-                transition-all active:scale-95 disabled:cursor-default
-              `}
-            >
-              {ally.stars > 1 && (
-                <div className="absolute -top-1 left-0 right-0 flex justify-center z-20">
-                  <div className="bg-black/80 px-1.5 py-0.5 rounded-full border border-tavern-gold/50 text-[8px]">
-                    {'⭐'.repeat(ally.stars)}
-                  </div>
-                </div>
-              )}
-              <div className="text-2xl mb-1">{ally.emoji}</div>
-              <div className="text-tavern-parchment text-[10px] font-display mb-1">
-                {ally.name.split(' ')[0]}
-              </div>
-              <div className="stat-badge text-[10px]">
-                ❤️{Math.max(0, ally.currentHealth)}/{ally.stats.health}
-              </div>
-            </button>
+        <div className="text-center space-y-0.5">
+          {battleLog.slice(-2).map((log, idx) => (
+            <div key={idx} className="text-tavern-parchment-dark text-[10px] font-display">
+              {log}
+            </div>
           ))}
         </div>
       </div>
       
-      {/* Hand & Mana */}
-      <div className="panel m-2 p-3 space-y-2">
-        <div className="flex justify-between items-center">
-          <div className="stat-badge">💧 {state.mana}/{state.maxMana}</div>
+      {/* Ally Area - Large Cards */}
+      <div className="flex-1 p-3 bg-blue-950/40">
+        <div className="text-blue-300 font-display font-semibold text-sm text-center mb-2">
+          YOUR PARTY
+        </div>
+        <div className="flex justify-center gap-2">
+          {allies.map((ally, idx) => {
+            const hpPercent = (ally.currentHealth / ally.stats.health) * 100;
+            return (
+              <button
+                key={idx}
+                onClick={() => handleTargetSelect(idx, false)}
+                disabled={ally.currentHealth <= 0 || selectedCard === null}
+                className={`
+                  panel p-3 w-28 h-36 flex flex-col items-center justify-between relative
+                  ${ally.currentHealth > 0 ? 'bg-blue-900/60' : 'opacity-30 grayscale'}
+                  ${selectedCard !== null && state.hand[selectedCard]?.effect.target === 'ally' ? 'ring-4 ring-green-400 scale-105' : ''}
+                  transition-all active:scale-95 disabled:cursor-default
+                `}
+              >
+                {ally.stars > 1 && (
+                  <div className="absolute -top-2 left-0 right-0 flex justify-center z-20">
+                    <div className="bg-yellow-600 px-2 py-0.5 rounded-full text-[10px] text-white font-bold shadow-lg">
+                      {'⭐'.repeat(ally.stars)}
+                    </div>
+                  </div>
+                )}
+                <div className="text-5xl">{ally.emoji}</div>
+                <div className="text-center w-full">
+                  <div className="text-white text-xs font-display font-bold mb-1">
+                    {ally.name.split(' ')[0]}
+                  </div>
+                  {/* HP Bar */}
+                  <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-green-600/50">
+                    <div 
+                      className="h-full bg-gradient-to-r from-green-600 to-green-400 transition-all duration-300"
+                      style={{ width: `${Math.max(0, hpPercent)}%` }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-green-200 mt-1">
+                    {Math.max(0, ally.currentHealth)}/{ally.stats.health} HP
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      
+      {/* Hand - Hearthstone style */}
+      <div className="bg-gradient-to-t from-black/80 to-transparent p-3 pt-6">
+        <div className="flex justify-between items-center mb-2">
+          <div className="stat-badge text-base">💧 {state.mana}/{state.maxMana}</div>
           {combatPhase === 'player_turn' && (
             <button
               onClick={runAutoCombat}
-              className="btn-secondary text-sm"
+              className="btn-primary py-2 px-6 text-sm"
             >
               End Turn ⚔️
             </button>
           )}
         </div>
         
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        {/* Cards */}
+        <div className="flex gap-2 justify-center overflow-x-auto pb-2">
           {state.hand.map((card, idx) => (
             <button
               key={idx}
               onClick={() => handleCardPlay(idx)}
-              disabled={state.mana < card.manaCost || combatPhase !== 'player_turn' || selectedCard === idx}
+              disabled={state.mana < card.manaCost || combatPhase !== 'player_turn'}
               className={`
-                panel p-2 flex-shrink-0 w-20 space-y-1
-                ${selectedCard === idx ? 'ring-4 ring-tavern-gold-light bg-tavern-gold/20' : ''}
-                ${state.mana < card.manaCost ? 'opacity-50' : ''}
+                hero-card flex-shrink-0 w-24 h-32 p-2 flex flex-col items-center justify-between
+                ${selectedCard === idx ? 'ring-4 ring-yellow-400 scale-105 -translate-y-2' : ''}
+                ${state.mana < card.manaCost ? 'opacity-40 grayscale' : 'hover:-translate-y-1'}
                 transition-all active:scale-95 disabled:cursor-not-allowed
               `}
             >
-              <div className="text-2xl">{card.emoji}</div>
-              <div className="text-tavern-parchment text-[10px] font-display leading-tight">
-                {card.name}
+              <div className="text-4xl">{card.emoji}</div>
+              <div className="text-center">
+                <div className="text-tavern-parchment text-[10px] font-display font-bold leading-tight">
+                  {card.name}
+                </div>
               </div>
-              <div className="stat-badge text-[10px]">{card.manaCost}💧</div>
+              <div className="stat-badge text-xs font-bold">{card.manaCost}💧</div>
             </button>
           ))}
         </div>
         
         {selectedCard !== null && (
-          <div className="text-tavern-parchment-dark text-[10px] font-display text-center animate-pulse">
+          <div className="mt-2 text-tavern-parchment text-[10px] font-display text-center bg-black/60 p-2 rounded">
             {state.hand[selectedCard]?.description}
           </div>
         )}

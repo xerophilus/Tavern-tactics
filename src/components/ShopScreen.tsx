@@ -8,15 +8,23 @@ export default function ShopScreen() {
   const synergies = calculateSynergies(state.board);
   const bonuses = getSynergyBonuses(synergies);
   
+  const isInitialShop = !state.currentRoom;
+  
   const handleProceed = () => {
-    const nextRooms = state.map.filter(r => 
-      !r.completed && state.map.some(prev => 
-        prev.completed && prev.connections.includes(r.id)
-      )
-    );
-    
-    if (nextRooms.length > 0) {
-      selectRoom(nextRooms[0].id);
+    if (isInitialShop) {
+      // Go to map for first time
+      selectRoom('map');
+    } else {
+      // Find next room after combat
+      const nextRooms = state.map.filter(r => 
+        !r.completed && state.map.some(prev => 
+          prev.completed && prev.connections.includes(r.id)
+        )
+      );
+      
+      if (nextRooms.length > 0) {
+        selectRoom(nextRooms[0].id);
+      }
     }
   };
   
@@ -149,7 +157,7 @@ export default function ShopScreen() {
           onClick={handleProceed}
           className="btn-primary w-full"
         >
-          ⚔️ Ready for Battle
+          {isInitialShop ? '🗺️ Enter Dungeon' : '⚔️ Continue'}
         </button>
       </div>
     </div>
