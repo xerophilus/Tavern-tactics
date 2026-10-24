@@ -25,6 +25,8 @@ export function upgradeHero(hero: Hero): Hero {
 }
 
 export function checkAndCombineHeroes(heroes: Hero[]): { heroes: Hero[], combined: boolean } {
+  console.log('[MERGE CHECK] Starting with heroes:', heroes.map(h => `${h.name} ${h.stars}★ (${h.instanceId.slice(0, 8)})`));
+  
   const heroGroups = new Map<string, Hero[]>();
   
   heroes.forEach(hero => {
@@ -34,6 +36,8 @@ export function checkAndCombineHeroes(heroes: Hero[]): { heroes: Hero[], combine
     }
     heroGroups.get(key)!.push(hero);
   });
+  
+  console.log('[MERGE CHECK] Groups:', Array.from(heroGroups.entries()).map(([key, group]) => `${key}: ${group.length} heroes`));
   
   let combined = false;
   let result: Hero[] = [];
@@ -46,6 +50,8 @@ export function checkAndCombineHeroes(heroes: Hero[]): { heroes: Hero[], combine
       const numUpgrades = Math.floor(group.length / 3);
       const remaining = group.length % 3;
       
+      console.log(`[MERGE] Upgrading ${numUpgrades}x ${key} (${remaining} remaining)`);
+      
       for (let i = 0; i < numUpgrades; i++) {
         result.push(upgradeHero(group[0]));
         combined = true;
@@ -56,6 +62,8 @@ export function checkAndCombineHeroes(heroes: Hero[]): { heroes: Hero[], combine
       result.push(...group);
     }
   });
+  
+  console.log('[MERGE CHECK] Result:', result.map(h => `${h.name} ${h.stars}★`), 'combined:', combined);
   
   if (combined) {
     return checkAndCombineHeroes(result);
