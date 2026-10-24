@@ -139,18 +139,49 @@ export function GameProvider({ children }: { children: ReactNode }) {
       const newBench = state.bench.filter((_, i) => i !== benchIndex);
       if (displaced) newBench.push(displaced);
       
-      setState(prev => ({ ...prev, board: newBoard, bench: newBench }));
+      // CHECK FOR MERGES after moving
+      const allHeroes = newBoard.filter((h): h is Hero => h !== null).concat(newBench);
+      const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
+      
+      // Redistribute after combining
+      const finalBoard: (Hero | null)[] = Array(5).fill(null);
+      const finalBench: Hero[] = [];
+      
+      combinedHeroes.forEach((h, idx) => {
+        if (idx < 5) {
+          finalBoard[idx] = h;
+        } else {
+          finalBench.push(h);
+        }
+      });
+      
+      setState(prev => ({ ...prev, board: finalBoard, bench: finalBench }));
     }
   };
 
   const removeHero = (boardIndex: number) => {
     const hero = state.board[boardIndex];
     if (hero) {
-      setState(prev => ({
-        ...prev,
-        board: prev.board.map((h, i) => i === boardIndex ? null : h),
-        bench: [...prev.bench, hero]
-      }));
+      const newBoard = state.board.map((h, i) => i === boardIndex ? null : h);
+      const newBench = [...state.bench, hero];
+      
+      // CHECK FOR MERGES after moving
+      const allHeroes = newBoard.filter((h): h is Hero => h !== null).concat(newBench);
+      const { heroes: combinedHeroes } = checkAndCombineHeroes(allHeroes);
+      
+      // Redistribute after combining
+      const finalBoard: (Hero | null)[] = Array(5).fill(null);
+      const finalBench: Hero[] = [];
+      
+      combinedHeroes.forEach((h, idx) => {
+        if (idx < 5) {
+          finalBoard[idx] = h;
+        } else {
+          finalBench.push(h);
+        }
+      });
+      
+      setState(prev => ({ ...prev, board: finalBoard, bench: finalBench }));
     }
   };
 

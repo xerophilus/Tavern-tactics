@@ -178,7 +178,7 @@ export default function CombatScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0 }}>
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-darkest to-red-950 safe-area-inset" style={{ width: '100%', maxWidth: '100%' }}>
       {/* Enemy Area - Large Cards */}
       <div className="p-3 min-h-[30%] bg-red-950/40" style={{ width: '100%' }}>
         <div className="font-display font-semibold text-sm text-center mb-2" style={{ color: '#FFFFFF' }}>
@@ -260,18 +260,18 @@ export default function CombatScreen() {
                   </div>
                 )}
                 <div className="text-5xl">{ally.emoji}</div>
-                <div className="text-center w-full">
-                  <div className="text-white text-xs font-display font-bold mb-1">
+                <div className="text-center w-full space-y-1">
+                  <div className="text-xs font-display font-black tracking-wide" style={{ color: '#FFFFFF', textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,1)' }}>
                     {ally.name.split(' ')[0]}
                   </div>
                   {/* HP Bar */}
-                  <div className="w-full bg-black/60 h-3 rounded-full overflow-hidden border border-green-600/50">
+                  <div className="w-full bg-black/80 h-3 rounded-full overflow-hidden border-2 border-green-500/80">
                     <div 
                       className="h-full bg-gradient-to-r from-green-600 to-green-400 transition-all duration-300"
                       style={{ width: `${Math.max(0, hpPercent)}%` }}
                     />
                   </div>
-                  <div className="text-[10px] text-green-200 mt-1">
+                  <div className="text-xs font-black tracking-wide" style={{ color: '#FFFFFF', textShadow: '0 2px 8px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,1)' }}>
                     {Math.max(0, ally.currentHealth)}/{ally.stats.health} HP
                   </div>
                 </div>

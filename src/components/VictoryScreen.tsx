@@ -4,7 +4,7 @@ export default function VictoryScreen() {
   const { startNewRun } = useGame();
   
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full bg-gradient-to-b from-tavern-gold/20 via-tavern-dark to-tavern-darkest p-6 text-center safe-area-inset" style={{ width: '100%', maxWidth: '100%', paddingLeft: '1.5rem', paddingRight: '1.5rem' }}>
+    <div className="flex flex-col items-center justify-center h-full w-full bg-gradient-to-b from-tavern-gold/20 via-tavern-dark to-tavern-darkest p-6 text-center safe-area-inset" style={{ width: '100%', maxWidth: '100%' }}>
       <div className="space-y-6 animate-slide-up">
         <div className="text-8xl mb-6 animate-bounce-subtle drop-shadow-2xl">🏆</div>
         

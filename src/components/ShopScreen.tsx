@@ -32,7 +32,7 @@ export default function ShopScreen() {
   };
   
   return (
-    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-dark via-tavern-wood to-tavern-dark safe-area-inset" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0 }}>
+    <div className="flex flex-col h-full w-full bg-gradient-to-b from-tavern-dark via-tavern-wood to-tavern-dark safe-area-inset" style={{ width: '100%', maxWidth: '100%' }}>
       {/* Top Stats Bar */}
       <div className="panel m-2 p-3 space-y-2">
         <div className="flex justify-between items-center text-tavern-parchment">
@@ -56,25 +56,30 @@ export default function ShopScreen() {
       
       {/* Board Area */}
       <div className="panel m-2 p-3">
-        <div className="flex items-center justify-between mb-2">
-          <div className="text-tavern-gold font-display font-semibold text-sm">
-            Your Party
-          </div>
-          {state.board.some(h => h !== null) && (
-            <div className="text-tavern-parchment-dark text-[9px] font-display">
-              Tap to remove ↓
-            </div>
-          )}
+        <div className="text-tavern-gold font-display font-semibold text-sm text-center mb-2">
+          Your Party
         </div>
         <div className="flex justify-center gap-2">
           {state.board.map((hero, idx) => (
             <div key={idx} className="relative">
               {hero ? (
-                <HeroCard 
-                  hero={hero} 
-                  onClick={() => removeHero(idx)}
-                  size="medium"
-                />
+                <>
+                  <HeroCard 
+                    hero={hero} 
+                    onClick={() => {}} 
+                    size="medium"
+                  />
+                  {/* X button to remove - safer than tap */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeHero(idx);
+                    }}
+                    className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-red-600 text-white text-sm font-bold shadow-lg border-2 border-red-400 z-20 active:scale-90 transition-transform"
+                  >
+                    ×
+                  </button>
+                </>
               ) : (
                 <div className="card-slot w-20 h-28 flex items-center justify-center relative">
                   <span className="text-tavern-copper/50 text-3xl">+</span>

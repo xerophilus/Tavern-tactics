@@ -37,14 +37,12 @@ export function HeroCard({ hero, onClick, size = 'medium', showStats = true, dis
     >
       <div className="hero-card-frame" />
       
-      {/* Stars at top */}
-      {hero.stars > 1 && (
-        <div className="absolute top-0 left-0 right-0 flex justify-center -mt-1 z-10">
-          <div className="bg-black/80 px-2 py-0.5 rounded-b-lg border border-t-0 border-tavern-gold/50">
-            <StarDisplay stars={hero.stars} size="sm" />
-          </div>
+      {/* Stars at top - ALWAYS show */}
+      <div className="absolute top-0 left-0 right-0 flex justify-center -mt-1 z-10">
+        <div className="bg-black/80 px-2 py-0.5 rounded-b-lg border border-t-0 border-tavern-gold/50">
+          <StarDisplay stars={hero.stars} size="sm" />
         </div>
-      )}
+      </div>
       
       {/* Hero Icon/Emoji */}
       <div className={`${emojiSizes[size]} mt-2 drop-shadow-lg relative z-10`}>
@@ -52,9 +50,9 @@ export function HeroCard({ hero, onClick, size = 'medium', showStats = true, dis
       </div>
       
       {/* Hero Name */}
-      <div className="text-center flex-1 flex items-center relative z-10">
-        <div className="text-[10px] font-display font-bold text-tavern-parchment leading-tight drop-shadow-md">
-          {hero.name.split(' ')[0]}
+      <div className="text-center flex-1 flex items-center relative z-10 px-1">
+        <div className="text-[9px] font-display font-bold text-tavern-parchment leading-tight drop-shadow-md w-full">
+          {hero.name}
         </div>
       </div>
       

@@ -5,12 +5,12 @@ export default function MapScreen() {
   
   const getNodeColor = (type: string) => {
     switch (type) {
-      case 'combat': return 'bg-gradient-to-br from-red-700 to-red-900 border-red-500';
-      case 'shop': return 'bg-gradient-to-br from-yellow-600 to-yellow-800 border-yellow-400';
-      case 'rest': return 'bg-gradient-to-br from-green-700 to-green-900 border-green-500';
-      case 'elite': return 'bg-gradient-to-br from-purple-700 to-purple-900 border-purple-500';
-      case 'boss': return 'bg-gradient-to-br from-red-950 to-black border-red-600';
-      default: return 'bg-tavern-wood border-tavern-copper';
+      case 'combat': return 'from-red-700 to-red-900 border-red-500';
+      case 'shop': return 'from-yellow-600 to-yellow-800 border-yellow-400';
+      case 'rest': return 'from-green-700 to-green-900 border-green-500';
+      case 'elite': return 'from-purple-700 to-purple-900 border-purple-500';
+      case 'boss': return 'from-red-950 to-black border-red-600';
+      default: return 'from-tavern-wood to-tavern-wood-light border-tavern-copper';
     }
   };
   
@@ -42,11 +42,10 @@ export default function MapScreen() {
     return previousLayerNodes.some(n => n.completed);
   };
   
-  // Group nodes into layers by checking their position in the map
+  // Group nodes into layers
   const layers: typeof state.map[number][][] = [];
   const nodeToLayer = new Map<string, number>();
   
-  // Build layers using BFS from first nodes
   const firstNodes = state.map.filter(n => {
     const hasNoPrevious = !state.map.some(other => other.connections.includes(n.id));
     return hasNoPrevious;
@@ -59,7 +58,6 @@ export default function MapScreen() {
     layers.push(currentLayerNodes);
     currentLayerNodes.forEach(n => nodeToLayer.set(n.id, layerIndex));
     
-    // Find next layer
     const nextLayerIds = new Set<string>();
     currentLayerNodes.forEach(node => {
       node.connections.forEach(id => nextLayerIds.add(id));
@@ -73,7 +71,7 @@ export default function MapScreen() {
   }
   
   return (
-    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood safe-area-inset w-full" style={{ width: '100%', maxWidth: '100%', paddingLeft: 0, paddingRight: 0 }}>
+    <div className="flex flex-col h-full bg-gradient-to-b from-tavern-darkest via-tavern-dark to-tavern-wood safe-area-inset w-full" style={{ width: '100%', maxWidth: '100%' }}>
       {/* Top Stats */}
       <div className="panel m-2 p-3">
         <div className="flex justify-between text-tavern-parchment items-center">
@@ -86,45 +84,71 @@ export default function MapScreen() {
       </div>
       
       {/* Title */}
-      <div className="text-center py-3">
-        <h2 className="text-xl font-display font-bold text-tavern-gold-light">
+      <div className="text-center py-2">
+        <h2 className="text-lg font-display font-bold text-tavern-gold-light">
           Choose Your Path
         </h2>
-        <div className="h-0.5 w-20 mx-auto mt-2 bg-gradient-to-r from-transparent via-tavern-gold to-transparent" />
       </div>
       
-      {/* Map - Branching structure */}
-      <div className="flex-1 flex flex-col justify-start px-3 py-2 overflow-y-auto gap-6">
+      {/* Map - Slay-the-Spire style with BIG nodes */}
+      <div className="flex-1 flex flex-col justify-start px-4 py-2 overflow-y-auto space-y-8">
         {layers.map((layer, layerIdx) => (
           <div key={layerIdx} className="relative">
+            {/* Connecting lines to previous layer */}
+            {layerIdx > 0 && (
+              <svg className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ transform: 'translateY(-4rem)' }}>
+                {layers[layerIdx - 1].map((prevNode, prevIdx) => 
+                  prevNode.connections
+                    .map(connId => layer.findIndex(n => n.id === connId))
+                    .filter(idx => idx !== -1)
+                    .map(currIdx => {
+                      const prevTotal = layers[layerIdx - 1].length;
+                      const currTotal = layer.length;
+                      const x1 = (100 / (prevTotal + 1)) * (prevIdx + 1);
+                      const x2 = (100 / (currTotal + 1)) * (currIdx + 1);
+                      return (
+                        <line
+                          key={`${prevNode.id}-${layer[currIdx].id}`}
+                          x1={`${x1}%`}
+                          y1="70%"
+                          x2={`${x2}%`}
+                          y2="30%"
+                          stroke={prevNode.completed ? '#d4af37' : '#666'}
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                          opacity={prevNode.completed ? '0.8' : '0.3'}
+                        />
+                      );
+                    })
+                )}
+              </svg>
+            )}
+            
             {/* Nodes in this layer */}
-            <div className="flex justify-center items-center gap-3" style={{ minHeight: '100px' }}>
+            <div className="flex justify-center items-center gap-4">
               {layer.map(node => {
                 const selectable = canSelectNode(node);
+                const colors = getNodeColor(node.type);
                 return (
                   <button
                     key={node.id}
                     onClick={() => selectable && selectRoom(node.id)}
                     disabled={!selectable || node.completed}
                     className={`
-                      relative flex-1 max-w-[80px] h-24 rounded-2xl flex flex-col items-center justify-center text-3xl
-                      border-4 shadow-card
-                      ${getNodeColor(node.type)}
+                      relative w-20 h-20 rounded-full flex flex-col items-center justify-center
+                      border-4 shadow-2xl
+                      bg-gradient-to-br ${colors}
                       ${node.completed ? 'opacity-40 grayscale' : selectable ? 'opacity-100' : 'opacity-30'}
-                      ${selectable && !node.completed ? 'ring-4 ring-tavern-gold-light scale-105 animate-bounce-subtle' : ''}
+                      ${selectable && !node.completed ? 'ring-4 ring-tavern-gold-light scale-110 shadow-[0_0_20px_rgba(212,175,55,0.6)]' : ''}
                       transition-all duration-200 active:scale-95
                       disabled:cursor-not-allowed
                     `}
                   >
-                    <span className="drop-shadow-lg relative z-10 text-4xl">{getNodeEmoji(node.type)}</span>
-                    <span className="text-[10px] text-white font-display font-semibold mt-1">
-                      {node.type === 'boss' ? 'BOSS' : ''}
-                    </span>
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/40 to-transparent" />
+                    <span className="drop-shadow-lg text-4xl">{getNodeEmoji(node.type)}</span>
                     
                     {node.completed && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-xl">
-                        <span className="text-5xl text-green-400">✓</span>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-full">
+                        <span className="text-4xl text-green-400">✓</span>
                       </div>
                     )}
                   </button>
